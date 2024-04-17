@@ -1,7 +1,14 @@
 #pragma once
 
+#include <fstream>
 #include <iostream>
+#include <vector>
+#include <complex>
+#include <algorithm>
 #include <chrono>
+#include <random>
+
+using namespace std;
 
 namespace func {
     template<typename T>
@@ -150,20 +157,188 @@ namespace func {
     }
 
     template<typename T>
-    SearchTree<T> symmetric(SearchTree<T>& set1, SearchTree<T>& set2) {
+    SearchTree<T> symmetric(SearchTree<T>& SearchTree1, SearchTree<T>& SearchTree2) {
         SearchTree<T> result;
         std::function<void(Node<T>*)> temp = [&](Node<T>* node) {
             if (node != nullptr) {
                 temp(node->left);
-                if (!(set1.contains(node->key) && set2.contains(node->key)))
+                if (!(SearchTree1.contains(node->key) && SearchTree2.contains(node->key)))
                     result.insert(node->key);
                 temp(node->right);
             }
             };
-        temp(set2.get_root());
-        temp(set1.get_root());
+        temp(SearchTree2.get_root());
+        temp(SearchTree1.get_root());
         return result;
 
     }
+
+	size_t lcg() {
+		static size_t x = 0;
+		x = (1021 * x + 24631) % 116640;
+		return x;
+	}
+
+	int random(int a, int b) {
+		std::random_device random_device;
+		std::mt19937 generator(random_device());
+		std::uniform_int_distribution<> distribution(a, b);
+		int res = distribution(generator);
+		return res;
+	}
+
+	uint64_t time_now() {
+		using namespace std::chrono;
+		return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+	}
+
+	double SearchTree_fill_time(int numbers_for_filling, int attempts) {
+		double res = 0;
+		for (int attempt = 0; attempt < attempts; attempt++) {
+			SearchTree<int> new_SearchTree;
+			int current_count_of_elements = 0;
+			uint64_t begin = time_now();
+			while (current_count_of_elements != numbers_for_filling) {
+				if (new_SearchTree.insert(random(-3 * numbers_for_filling, 3 * numbers_for_filling))) {
+					current_count_of_elements++;
+				}
+			}
+			uint64_t end = time_now();
+			res += (end - begin);
+		}
+		return res / attempts;
+	}
+
+	double vector_fill_time(int numbers_for_filling, int attempts) {
+		double res = 0;
+		for (int attempt = 0; attempt < attempts; attempt++) {
+			vector<int> new_vector;
+			int current_count_of_elements = 0;
+			uint64_t begin = time_now();
+			while (current_count_of_elements != numbers_for_filling) {
+				new_vector.push_back(random(-3 * numbers_for_filling, 3 * numbers_for_filling));
+				current_count_of_elements++;
+			}
+			uint64_t end = time_now();
+			res += (end - begin);
+		}
+		return res / attempts;
+	}
+
+	double SearchTree_contain_element_time(int numbers_for_filling, int attempts) {
+		double res = 0;
+		for (int attempt = 0; attempt < attempts; attempt++) {
+			SearchTree<int> new_SearchTree;
+			int current_count_of_elements = 0;
+			while (current_count_of_elements != numbers_for_filling) {
+				if (new_SearchTree.insert(random(-3 * numbers_for_filling, 3 * numbers_for_filling))) {
+					current_count_of_elements++;
+				}
+			}
+			uint64_t begin = time_now();
+			new_SearchTree.contains(random(-4 * numbers_for_filling, 4 * numbers_for_filling));
+			uint64_t end = time_now();
+			res += (end - begin);
+		}
+		return res / attempts;
+	}
+
+	double vector_contain_element_time(int numbers_for_filling, int attempts) {
+		double res = 0;
+		for (int attempt = 0; attempt < attempts; attempt++) {
+			vector<int> new_vector;
+			int current_count_of_elements = 0;
+			while (current_count_of_elements != numbers_for_filling) {
+				new_vector.push_back(random(-3 * numbers_for_filling, 3 * numbers_for_filling));
+				current_count_of_elements++;
+			}
+			uint64_t begin = time_now();
+			size_t element = random(-4 * numbers_for_filling, 4 * numbers_for_filling);
+			for (int i = 0; i < new_vector.size(); i++) {
+				if (new_vector[i] == element) {
+					break;
+				}
+			}
+			uint64_t end = time_now();
+			res += (end - begin);
+		}
+		return res / attempts;
+	}
+
+	double SearchTree_insert_element_time(int numbers_for_filling, int attempts) {
+		double res = 0;
+		for (int attempt = 0; attempt < attempts; attempt++) {
+			SearchTree<int> new_SearchTree;
+			int current_count_of_elements = 0;
+			while (current_count_of_elements != numbers_for_filling) {
+				if (new_SearchTree.insert(random(-3 * numbers_for_filling, 3 * numbers_for_filling))) {
+					current_count_of_elements++;
+				}
+			}
+			uint64_t begin = time_now();
+			new_SearchTree.insert(random(-3 * numbers_for_filling, 3 * numbers_for_filling));
+			uint64_t end = time_now();
+			res += (end - begin);
+		}
+		return res / attempts;
+	}
+
+	double vector_insert_element_time(int numbers_for_filling, int attempts) {
+		double res = 0;
+		for (int attempt = 0; attempt < attempts; attempt++) {
+			vector <int> new_vector;
+			int current_count_of_elements = 0;
+			while (current_count_of_elements != numbers_for_filling) {
+				new_vector.push_back(random(-3 * numbers_for_filling, 3 * numbers_for_filling));
+				current_count_of_elements++;
+			}
+			uint64_t begin = time_now();
+			new_vector.push_back(random(-3 * numbers_for_filling, 3 * numbers_for_filling));
+			uint64_t end = time_now();
+			res += (end - begin);
+		}
+		return res / attempts;
+	}
+
+	double SearchTree_erase_element_time(int numbers_for_filling, int attempts) {
+		double res = 0;
+		for (int attempt = 0; attempt < attempts; attempt++) {
+			SearchTree<int> new_SearchTree;
+			int current_count_of_elements = 0;
+			while (current_count_of_elements != numbers_for_filling) {
+				if (new_SearchTree.insert(random(-3 * numbers_for_filling, 3 * numbers_for_filling))) {
+					current_count_of_elements++;
+				}
+			}
+			uint64_t begin = time_now();
+			new_SearchTree.erase(random(-2 * numbers_for_filling, 2 * numbers_for_filling));
+			uint64_t end = time_now();
+			res += (end - begin);
+		}
+		return res / attempts;
+	}
+
+	double vector_erase_element_time(int numbers_for_filling, int attempts) {
+		double res = 0;
+		for (int attempt = 0; attempt < attempts; attempt++) {
+			vector<int> new_vector;
+			int current_count_of_elements = 0;
+			while (current_count_of_elements != numbers_for_filling) {
+				new_vector.push_back(random(-3 * numbers_for_filling, 3 * numbers_for_filling));
+				current_count_of_elements++;
+			}
+			uint64_t begin = time_now();
+			size_t element = random(-2 * numbers_for_filling, 2 * numbers_for_filling);
+			for (int i = 0; i < new_vector.size(); i++) {
+				if (new_vector[i] == element) {
+					new_vector.erase(new_vector.begin() + i);
+					break;
+				}
+			}
+			uint64_t end = time_now();
+			res += (end - begin);
+		}
+		return res / attempts;
+	}
 }
 
