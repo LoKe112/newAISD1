@@ -96,3 +96,62 @@ TEST(CreatedSet, EraseElement2) {
 	a.erase(0);
 	a.print();
 }
+TEST(Logic_operations, EraseTime) {
+	Set<int> test_set_1(1);
+	test_set_1.insert(2);
+	test_set_1.insert(3);
+	test_set_1.insert(4);
+	Set<int> test_set_2(4);
+	test_set_2.insert(5);
+	test_set_2.insert(6);
+	test_set_2.insert(7);
+
+	Set<int> result_xor = logic_xor(test_set_1, test_set_2);
+	Set<int> result_or = logic_or(test_set_1, test_set_2);
+	result_xor.print();
+	result_or.print();
+}
+TEST(ComparisonOfVectorAndSet, FillTime) {
+	int number = 1000;
+	cout << number << " " << "Vector time: " << vector_fill_time(number, 100) << endl;
+	cout << number << " " << "Set time : " << set_fill_time(number, 100) << endl;
+	number = 10000;
+	cout << number << " " << "Vector time: " << vector_fill_time(number, 100) << endl;
+	cout << number << " " << "Set time : " << set_fill_time(number, 100) << endl;
+	number = 100000;
+	cout << number << " " << "Vector time: " << vector_fill_time(number, 100) << endl;
+	cout << number << " " << "Set time : " << set_fill_time(number, 100) << endl;
+}
+TEST(ComparisonOfVectorAndSet, ContainTime) {
+	int number = 1000;
+	cout << number << " " << "Vector time : " << vector_contain_element_time(number, 1000) << endl;
+	cout << number << " " << "Set time : " << set_contain_element_time(number, 1000) << endl;
+	number = 10000;
+	cout << number << " " << "Vector time : " << vector_contain_element_time(number, 1000) << endl;
+	cout << number << " " << "Set time : " << set_contain_element_time(number, 1000) << endl;
+	number = 100000;
+	cout << number << " " << "Vector time : " << vector_contain_element_time(number, 1000) << endl;
+	cout << number << " " << "Set time : " << set_contain_element_time(number, 1000) << endl;
+}
+TEST(ComparisonOfVectorAndSet, InsertTime) {
+	int number = 1000;
+	cout << number << " " << "Vector time: " << vector_insert_element_time(number, 1000) << endl;
+	cout << number << " " << "Set time: " << set_insert_element_time(number, 1000) << endl;
+	number = 10000;
+	cout << number << " " << "Vector time: " << vector_insert_element_time(number, 1000) << endl;
+	cout << number << " " << "Set time: " << set_insert_element_time(number, 1000) << endl;
+	number = 100000;
+	cout << number << " " << "Vector time: " << vector_insert_element_time(number, 1000) << endl;
+	cout << number << " " << "Set time: " << set_insert_element_time(number, 1000) << endl;
+}
+TEST(ComparisonOfVectorAndSet, EraseTime) {
+	int number = 1000;
+	cout << number << " " << "Vector time: " << vector_erase_element_time(number, 1000) << endl;
+	cout << number << " " << "Set time: " << set_erase_element_time(number, 1000) << endl;
+	number = 10000;
+	cout << number << " " << "Vector time: " << vector_erase_element_time(number, 1000) << endl;
+	cout << number << " " << "Set time: " << set_erase_element_time(number, 1000) << endl;
+	number = 100000;
+	cout << number << " " << "Vector time: " << vector_erase_element_time(number, 1000) << endl;
+	cout << number << " " << "Set time: " << set_erase_element_time(number, 1000) << endl;
+}

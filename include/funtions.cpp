@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <chrono>
 #include <random>
+#include <functional>
 
 using namespace std;
 
@@ -16,10 +17,10 @@ namespace tree {
 		T _value;
 		Node<T>* _left;
 		Node<T>* _right;
-		Node<T>* _parent;
+		
 
-		Node(T number) : _value(number), _left(nullptr), _right(nullptr), _parent(nullptr) {}
-		Node(T number, Node* ref1, Node* ref2) : _value(number), _left(ref1), _right(ref2), _parent(nullptr) {}
+		Node(T number) : _value(number), _left(nullptr), _right(nullptr) {}
+		Node(T number, Node* ref1, Node* ref2) : _value(number), _left(ref1), _right(ref2){}
 
 	};
 
@@ -126,12 +127,7 @@ namespace tree {
 			_root = copying(other._root);
 		}
 
-		Set(const vector<T>& other) {
-			_root = nullptr;
-			for (auto vec : other) {
-				insert(vec);
-			}
-		}
+		
 
 		Set<T>& operator=(const Set<T>& other) {
 			if (this != &other) {
@@ -178,17 +174,11 @@ namespace tree {
 		return x;
 	}
 
-	int random(int a, int b) {
-		std::random_device random_device;
-		std::mt19937 generator(random_device());
-		std::uniform_int_distribution<> distribution(a, b);
-		int res = distribution(generator);
-		return res;
-	}
+	
 
 	uint64_t time_now() {
 		using namespace std::chrono;
-		return duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
+		return duration_cast<microseconds>(system_clock::now().time_since_epoch()).count();
 	}
 
 	double set_fill_time(int numbers_for_filling, int attempts) {
@@ -198,7 +188,7 @@ namespace tree {
 			int current_count_of_elements = 0;
 			uint64_t begin = time_now();
 			while (current_count_of_elements != numbers_for_filling) {
-				if (new_set.insert(random(-3 * numbers_for_filling, 3 * numbers_for_filling))) {
+				if (new_set.insert(lcg())) {
 					current_count_of_elements++;
 				}
 			}
@@ -215,7 +205,7 @@ namespace tree {
 			int current_count_of_elements = 0;
 			uint64_t begin = time_now();
 			while (current_count_of_elements != numbers_for_filling) {
-				new_vector.push_back(random(-3 * numbers_for_filling, 3 * numbers_for_filling));
+				new_vector.push_back(lcg());
 				current_count_of_elements++;
 			}
 			uint64_t end = time_now();
@@ -230,12 +220,12 @@ namespace tree {
 			Set<int> new_set;
 			int current_count_of_elements = 0;
 			while (current_count_of_elements != numbers_for_filling) {
-				if (new_set.insert(random(-3 * numbers_for_filling, 3 * numbers_for_filling))) {
+				if (new_set.insert(lcg())) {
 					current_count_of_elements++;
 				}
 			}
 			uint64_t begin = time_now();
-			new_set.contain(random(-4 * numbers_for_filling, 4 * numbers_for_filling));
+			new_set.contain(lcg());
 			uint64_t end = time_now();
 			res += (end - begin);
 		}
@@ -248,11 +238,11 @@ namespace tree {
 			vector<int> new_vector;
 			int current_count_of_elements = 0;
 			while (current_count_of_elements != numbers_for_filling) {
-				new_vector.push_back(random(-3 * numbers_for_filling, 3 * numbers_for_filling));
+				new_vector.push_back(lcg());
 				current_count_of_elements++;
 			}
 			uint64_t begin = time_now();
-			size_t element = random(-4 * numbers_for_filling, 4 * numbers_for_filling);
+			size_t element = lcg();
 			for (int i = 0; i < new_vector.size(); i++) {
 				if (new_vector[i] == element) {
 					break;
@@ -270,12 +260,12 @@ namespace tree {
 			Set<int> new_set;
 			int current_count_of_elements = 0;
 			while (current_count_of_elements != numbers_for_filling) {
-				if (new_set.insert(random(-3 * numbers_for_filling, 3 * numbers_for_filling))) {
+				if (new_set.insert(lcg())) {
 					current_count_of_elements++;
 				}
 			}
 			uint64_t begin = time_now();
-			new_set.insert(random(-3 * numbers_for_filling, 3 * numbers_for_filling));
+			new_set.insert(lcg());
 			uint64_t end = time_now();
 			res += (end - begin);
 		}
@@ -288,11 +278,11 @@ namespace tree {
 			vector<int> new_vector;
 			int current_count_of_elements = 0;
 			while (current_count_of_elements != numbers_for_filling) {
-				new_vector.push_back(random(-3 * numbers_for_filling, 3 * numbers_for_filling));
+				new_vector.push_back(lcg());
 				current_count_of_elements++;
 			}
 			uint64_t begin = time_now();
-			new_vector.push_back(random(-3 * numbers_for_filling, 3 * numbers_for_filling));
+			new_vector.push_back(lcg());
 			uint64_t end = time_now();
 			res += (end - begin);
 		}
@@ -305,12 +295,12 @@ namespace tree {
 			Set<int> new_set;
 			int current_count_of_elements = 0;
 			while (current_count_of_elements != numbers_for_filling) {
-				if (new_set.insert(random(-3 * numbers_for_filling, 3 * numbers_for_filling))) {
+				if (new_set.insert(lcg())) {
 					current_count_of_elements++;
 				}
 			}
 			uint64_t begin = time_now();
-			new_set.erase(random(-2 * numbers_for_filling, 2 * numbers_for_filling));
+			new_set.erase(lcg());
 			uint64_t end = time_now();
 			res += (end - begin);
 		}
@@ -323,11 +313,11 @@ namespace tree {
 			vector<int> new_vector;
 			int current_count_of_elements = 0;
 			while (current_count_of_elements != numbers_for_filling) {
-				new_vector.push_back(random(-3 * numbers_for_filling, 3 * numbers_for_filling));
+				new_vector.push_back(lcg());
 				current_count_of_elements++;
 			}
 			uint64_t begin = time_now();
-			size_t element = random(-2 * numbers_for_filling, 2 * numbers_for_filling);
+			size_t element = lcg();
 			for (int i = 0; i < new_vector.size(); i++) {
 				if (new_vector[i] == element) {
 					new_vector.erase(new_vector.begin() + i);
@@ -338,5 +328,36 @@ namespace tree {
 			res += (end - begin);
 		}
 		return res / attempts;
+	}
+
+	template<typename T>
+	Set<T> logic_or(Set<T> left_tree, Set<T> right_tree) {
+		Set<T> result;
+		std::function<void(Node<T>*)> m_union = [&](Node<T>* node) {
+			if (node != nullptr) {
+				m_union(node->_left);
+				result.insert(node->_value);
+				m_union(node->_right);
+			}
+			};
+		m_union(left_tree.get_root());
+		m_union(right_tree.get_root());
+		return result;
+	}
+	template<typename T>
+	Set<T> logic_xor(Set<T> left_tree, Set<T> right_tree) {
+		Set<T> result;
+		std::function<void(Node<T>*)> m_union = [&](Node<T>* node) {
+			if (node != nullptr) {
+				m_union(node->_left);
+				if (!(left_tree.contain(node->_value) && right_tree.contain(node->_value))) {
+					result.insert(node->_value);
+				}
+				m_union(node->_right);
+			}
+			};
+		m_union(left_tree.get_root());
+		m_union(right_tree.get_root());
+		return result;
 	}
 }
